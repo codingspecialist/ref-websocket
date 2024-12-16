@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+</head>
+<body>
+<div>
+    <ul>
+        <li><a href="/">채팅목록</a></li>
+        <li><a href="/save-form">채팅 메시지쓰기</a></li>
+    </ul>
+</div>
+<h1>채팅 목록</h1>
+<hr>
+<ul id="chat-box">
+    {{#models}}
+        <li>{{msg}}</li>
+    {{/models}}
+</ul>
+
+<script>
+    setTimeout(()=>{
+        location.reload();
+    }, 2000);
+</script>
+
+</body>
+</html>
