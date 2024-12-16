@@ -21,9 +21,23 @@
 </ul>
 
 <script>
-    setTimeout(()=>{
-        location.reload();
+    setInterval(()=>{
+        chatList();
     }, 2000);
+
+    async function chatList(){
+        let response = await fetch("/api");
+        let responseBody = await response.json();
+
+        let site = document.querySelector("#chat-box");
+        site.innerHTML = "";
+
+        responseBody.forEach(chat=> {
+            let dom = document.createElement("li");
+            dom.innerText = chat.msg;
+            site.append(dom);
+        });
+    }
 </script>
 
 </body>

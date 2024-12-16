@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Controller
 public class ChatController {
@@ -21,6 +23,12 @@ public class ChatController {
     public String index(Model model) {
         model.addAttribute("models", chatService.findAll());
         return "index";
+    }
+
+    @GetMapping("/api")
+    public ResponseEntity<?> api(){
+        List<Chat> models = chatService.findAll();
+        return ResponseEntity.ok(models);
     }
 
     @PostMapping("/chat")
