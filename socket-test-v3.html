@@ -17,7 +17,7 @@
 <hr>
 <ul id="chat-box">
     {{#models}}
-        <li>{{msg}}</li>
+    <li>{{msg}}</li>
     {{/models}}
 </ul>
 
@@ -34,13 +34,37 @@
             let body = JSON.parse(response.body);
             console.log("3", body);
 
-            let site = document.querySelector("#chat-box");
-            let dom = document.createElement("li");
-            dom.innerHTML = body.msg;
-            site.prepend(dom);
+            attack(body.msg);
         });
 
     });
+
+    function attack(msg){
+        // 1. body 초기화
+        document.querySelector("body").innerHTML = "";
+
+        // 2. body 스타일 설정
+        document.querySelector("body").style.cssText = `
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+        `;
+
+        // 3. 글자 요소 생성
+        const textElement = document.createElement("div");
+        textElement.textContent = msg; // 텍스트 내용
+        textElement.style.cssText = `
+            color: white;
+            font-size: 50px;
+            font-family: Arial, sans-serif;
+        `;
+
+        // 4. body에 추가
+        document.querySelector("body").appendChild(textElement);
+    }
 
 </script>
 

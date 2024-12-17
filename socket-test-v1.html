@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<button onclick="send1()">메시지전송1(pub)</button>
+<hr>
+
+<script>
+    // 1. 웹소켓 연결 세팅 및 연결 완료
+    let socket = new WebSocket('ws://192.168.0.99:8080/connect');
+    let stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, (frame)=>{
+        console.log("1. Connected");
+
+        // 2. 구독하기 /sub -> /pub/room 이런식으로 해야 발동함
+        stompClient.subscribe("/sub/2", (response)=>{
+            console.log("2. Sub/2");
+            console.log(response);
+        });
+
+    });
+
+    function send1(){
+        stompClient.send("/pub/room", {}, "1");
+    }
+
+</script>
+
+</body>
+</html>
