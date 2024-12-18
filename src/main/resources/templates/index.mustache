@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Document</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body>
 <div>
@@ -22,25 +21,33 @@
 </ul>
 
 <script>
-    // 1. 웹소켓 연결 세팅 및 연결 완료
-    let socket = new WebSocket('ws://192.168.0.99:8080/connect');
-    let stompClient = Stomp.over(socket);
+    // 1. SSE 연결
+    const sse = new EventSource("/connect");
 
-    stompClient.connect({}, (frame)=>{
-        console.log("1", "Connected");
-
-        stompClient.subscribe("/sub/chat", (response)=>{
-            console.log("2", response);
-            let body = JSON.parse(response.body);
-            console.log("3", body);
-
-            let site = document.querySelector("#chat-box");
-            let dom = document.createElement("li");
-            dom.innerHTML = body.msg;
-            site.prepend(dom);
-        });
-
+    // 2. SSE 최초 연결되면 더미 데이터를 받을 리스너 등록 ("connect" 라는 이름으로 연결)
+    sse.addEventListener('connect', (e) => {
+        console.log("1.connect", e);
+        const { data: body } = e;
+        console.log('1.1 connect event data: ',body);  // "dummy-data"
     });
+
+    // 3. 이벤트를 받을 진짜 리스너 등록 ("chat" 라는 이름으로 연결)
+    sse.addEventListener('chat', e => {
+        console.log("2.chat", e);
+        const { data: body } = e;
+        console.log("2.1 chat event data",body);
+
+        let chat = JSON.parse(body);
+        changeDom(chat.msg);
+    });
+
+    // 2. DOM 변경
+    function changeDom(msg){
+        let site = document.querySelector("#chat-box");
+        let dom = document.createElement("li");
+        dom.innerHTML = msg;
+        site.prepend(dom);
+    }
 
 </script>
 
